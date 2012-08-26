@@ -3,9 +3,9 @@ require File.expand_path('../lib/digitsend/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Chad Hendry"]
-  gem.email         = ["chendry@chendry.org"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.email         = ["chendry@digitsend.com"]
+  gem.description   = %q{client library for DigitSend.}
+  gem.summary       = %q{DigitSend allows you to send secure, phone-verified messages.}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
