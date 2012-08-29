@@ -22,7 +22,7 @@ module DigitSend
 
   class Message
     def initialize
-      @attachments = []
+      @attachments = {}
       yield self
     end
 
@@ -32,8 +32,8 @@ module DigitSend
 
     attr_accessor :to, :cc, :subject, :body
 
-    def add_file(path)
-      @attachments << path
+    def add_file(filename, data = nil)
+      @attachments[File.basename(filename)] = stream_for_data(filename, data)
     end
 
     def send
@@ -42,15 +42,27 @@ module DigitSend
         cc: cc,
         subject: subject,
         body: body,
-        s3_file_uuids: @attachments.collect { |path| s3_file_uuid(path) }
+        s3_file_uuids: @attachments.collect { |filename, data| s3_file_uuid(filename, data) }
       }
     end
 
     private
 
-      def s3_file_uuid(path)
-         response = create_s3_file(File.basename(path))
-         upload_to_s3(path, URI.parse(response["url"]), response["fields"])
+      def stream_for_data(filename, data)
+        if data.nil?
+          File.open(filename, "r")
+        else
+          if data.is_a?(String)
+            StringIO.new(data)
+          else
+            data
+          end
+        end
+      end
+
+      def s3_file_uuid(filename, data)
+         response = create_s3_file(filename)
+         upload_to_s3(URI.parse(response["url"]), response["fields"], data)
          update_s3_file(response["uuid"])
          response["uuid"]
       end
@@ -59,10 +71,10 @@ module DigitSend
         api_call :post, '/api/s3_files', s3_file: { name: name }
       end
 
-      def upload_to_s3(path, url, fields)
+      def upload_to_s3(url, fields, data)
         req = Net::HTTP::Post::Multipart.new \
           url.to_s,
-          fields.merge("file" => UploadIO.new(File.open(path), "binary/octet-stream", path))
+          fields.merge("file" => UploadIO.new(data, "binary/octet-stream"))
 
         n = Net::HTTP.new(url.host, url.port)
         n.use_ssl = true
