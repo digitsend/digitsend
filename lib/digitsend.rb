@@ -37,7 +37,7 @@ module DigitSend
     end
 
     def send
-      api_call '/api/messages', message: {
+      api_call :post, '/api/messages', message: {
         to: to,
         cc: cc,
         subject: subject,
@@ -56,7 +56,7 @@ module DigitSend
       end
 
       def create_s3_file(name)
-        api_call '/api/s3_files', s3_file: { name: name }
+        api_call :post, '/api/s3_files', s3_file: { name: name }
       end
 
       def upload_to_s3(path, url, fields)
@@ -74,14 +74,14 @@ module DigitSend
       end
 
       def finalize_s3_file(uuid)
-        api_call "/api/s3_files/#{uuid}/finalize", nil
+        api_call :put, "/api/s3_files/#{uuid}/finalize", nil
       end
 
-      def api_call(path, params)
+      def api_call(verb, path, params)
         http = Net::HTTP.new(Config.host, Config.port)
         http.use_ssl = Config.use_ssl
 
-        response = http.post path, params && params.to_json,
+        response = http.send verb, path, params && params.to_json,
           'Content-Type' => 'application/json',
           'Accept' => 'application/vnd.digitsend.v1',
           'Authorization' => %Q[Token token="#{Config.api_token}"]
