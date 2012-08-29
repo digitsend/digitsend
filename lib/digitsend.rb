@@ -51,7 +51,7 @@ module DigitSend
       def s3_file_uuid(path)
          response = create_s3_file(File.basename(path))
          upload_to_s3(path, URI.parse(response["url"]), response["fields"])
-         finalize_s3_file(response["uuid"])
+         update_s3_file(response["uuid"])
          response["uuid"]
       end
 
@@ -73,8 +73,8 @@ module DigitSend
         end
       end
 
-      def finalize_s3_file(uuid)
-        api_call :put, "/api/s3_files/#{uuid}/finalize", nil
+      def update_s3_file(uuid)
+        api_call :put, "/api/s3_files/#{uuid}", nil
       end
 
       def api_call(verb, path, params)
