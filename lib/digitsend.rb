@@ -5,10 +5,10 @@ require "json"
 
 module DigitSend
   class Config
-    class <<self
-      @host = 'digitsend.com'
-      @use_ssl = true
+    @host = 'digitsend.com'
+    @use_ssl = true
 
+    class <<self
       attr_accessor :api_token
       attr_accessor :host
       attr_accessor :use_ssl
