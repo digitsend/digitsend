@@ -56,7 +56,7 @@ module DigitSend
       end
 
       def create_s3_file(name)
-        api_call '/api/s3_files', { name: name }
+        api_call '/api/s3_files', s3_file: { name: name }
       end
 
       def upload_to_s3(path, url, fields)
