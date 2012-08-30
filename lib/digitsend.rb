@@ -23,11 +23,10 @@ module DigitSend
   class Message
     def initialize
       @attachments = []
-      yield self
     end
 
     def self.send(&block)
-      new(&block).send
+      new.tap { |m| yield(m) }.send
     end
 
     attr_accessor :to, :cc, :subject, :body
