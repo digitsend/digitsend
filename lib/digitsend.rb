@@ -56,12 +56,10 @@ module DigitSend
       def stream_for_data(filename, data)
         if data.nil?
           File.open(filename, "r")
+        elsif data.is_a?(String)
+          StringIO.new(data)
         else
-          if data.is_a?(String)
-            StringIO.new(data)
-          else
-            data
-          end
+          data
         end
       end
 
