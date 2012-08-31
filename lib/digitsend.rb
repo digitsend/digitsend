@@ -20,6 +20,20 @@ module DigitSend
     end
   end
 
+  class Client
+    def self.call(path, params)
+      http = Net::HTTP.new(Config.host, Config.port)
+      http.use_ssl = Config.use_ssl
+
+      response = http.post path, params && params.to_json,
+        'Content-Type' => 'application/json',
+        'Accept' => 'application/vnd.digitsend.v1',
+        'Authorization' => %Q[Token token="#{Config.api_token}"]
+
+      response.body.empty? ? nil : JSON.parse(response.body)
+    end
+  end
+
   class Message
     def initialize
       @attachments = []
@@ -36,7 +50,7 @@ module DigitSend
     end
 
     def send
-      api_call '/api/messages', message: {
+      Client.call '/api/messages', message: {
         to: to,
         cc: cc,
         subject: subject,
@@ -70,7 +84,7 @@ module DigitSend
       end
 
       def create_s3_file(name)
-        api_call '/api/s3_files', s3_file: { name: name }
+        Client.call '/api/s3_files', s3_file: { name: name }
       end
 
       def upload_to_s3(url, fields, stream)
@@ -85,18 +99,6 @@ module DigitSend
         n.start do |http|
           http.request(req)
         end
-      end
-
-      def api_call(path, params)
-        http = Net::HTTP.new(Config.host, Config.port)
-        http.use_ssl = Config.use_ssl
-
-        response = http.post path, params && params.to_json,
-          'Content-Type' => 'application/json',
-          'Accept' => 'application/vnd.digitsend.v1',
-          'Authorization' => %Q[Token token="#{Config.api_token}"]
-
-        response.body.empty? ? nil : JSON.parse(response.body)
       end
   end
 end
