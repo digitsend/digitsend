@@ -48,7 +48,7 @@ module DigitSend
       private
 
         def create_s3_file(name)
-          Client.call '/api/s3_files', s3_file: { name: name }
+          Client.call '/api/s3_files', s3_file: { name: File.basename(name) }
         end
 
         def upload_to_s3(url, fields, stream)
