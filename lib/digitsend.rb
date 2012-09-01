@@ -15,7 +15,7 @@ module DigitSend
       attr_writer :port
 
       def port
-        @port || use_ssl ? 443 : 80
+        @port || ( @use_ssl ? 443 : 80 )
       end
     end
   end
