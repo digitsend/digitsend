@@ -15,7 +15,7 @@ module DigitSend
     end
 
     def send
-      Client.call '/api/messages', message: {
+      Client.call '/messages', message: {
         to: to,
         cc: cc,
         subject: subject,
