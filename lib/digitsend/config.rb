@@ -1,6 +1,6 @@
 module DigitSend
   class Config
-    @host = 'digitsend.com'
+    @host = 'api.digitsend.com'
     @use_ssl = true
 
     class <<self
