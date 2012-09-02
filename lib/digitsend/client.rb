@@ -17,21 +17,21 @@ module DigitSend
         response.body.empty? ? nil : JSON.parse(response.body)
       end
 
-      def upload_s3_file(filename, data)
-         response = create_s3_file(filename)
+      def upload_s3_file(path, data)
+         response = create_s3_file(File.basename(path))
 
          upload_to_s3 \
            URI.parse(response["url"]),
            response["fields"],
-           stream_for_data(filename, data)
+           stream_for_data(path, data)
 
          response["uuid"]
       end
 
       private
 
-        def create_s3_file(name)
-          Client.call '/api/s3_files', s3_file: { name: File.basename(name) }
+        def create_s3_file(filename)
+          Client.call '/api/s3_files', s3_file: { name: filename }
         end
 
         def upload_to_s3(url, fields, stream)
@@ -48,9 +48,9 @@ module DigitSend
           end
         end
 
-        def stream_for_data(filename, data)
+        def stream_for_data(path, data)
           if data.nil?
-            File.open(filename, "r")
+            File.open(path, "r")
           elsif data.is_a?(String)
             StringIO.new(data)
           else
