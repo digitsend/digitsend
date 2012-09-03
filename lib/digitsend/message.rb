@@ -2,13 +2,14 @@ module DigitSend
   class Message
     def initialize
       @attachments = []
+      @phone_numbers = {}
     end
 
     def self.send(&block)
       new.tap { |m| yield(m) }.send
     end
 
-    attr_accessor :to, :cc, :subject, :body
+    attr_accessor :to, :cc, :subject, :body, :phone_numbers
 
     def add_file(filename, data = nil)
       @attachments << [ filename, data ]
@@ -20,7 +21,8 @@ module DigitSend
         cc: cc,
         subject: subject,
         body: body,
-        s3_file_uuids: s3_file_uuids
+        s3_file_uuids: s3_file_uuids,
+        phone_numbers: phone_numbers
       }
     end
 
