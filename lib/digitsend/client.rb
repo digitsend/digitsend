@@ -14,8 +14,13 @@ module DigitSend
           'Accept' => 'application/vnd.digitsend.v1',
           'Authorization' => %Q[Token token="#{Config.api_token}"]
 
-        check_for_errors!(response)
-        nil
+        hash = JSON.parse(response.body)
+
+        if response.code != "200"
+          raise exception_for_response(hash)
+        else
+          hash["data"]
+        end
       end
 
       def upload_s3_file(path, data)
@@ -59,11 +64,7 @@ module DigitSend
           end
         end
 
-        def check_for_errors!(response)
-          return if response.code == "200"
-
-          hash = JSON.parse(response.body)
-
+        def exception_for_response!(hash)
           raise case hash["message"]
             when "Missing phone numbers" then MissingPhoneNumbers.new(hash)
             else DigitSend::Exception.new(hash)

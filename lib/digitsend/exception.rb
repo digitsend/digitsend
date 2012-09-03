@@ -1,7 +1,7 @@
 module DigitSend
   class Exception < ::Exception
     def initialize(hash)
-      super(message)
+      super(hash["message"])
       @data = hash["data"]
     end
 
