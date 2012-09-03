@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "digitsend"
   gem.require_paths = ["lib"]
   gem.version       = DigitSend::VERSION
+
+  gem.add_dependency "multipart-post", "~> 1.1"
 end
