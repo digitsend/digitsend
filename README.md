@@ -1,12 +1,16 @@
 # DigitSend
 
-DigitSend is a secure email and file sharing service with a streamlined two-factor registration process.  This gem allows you to send email and upload files to share programmatically.
+DigitSend is a secure email and file sharing service with a streamlined
+two-factor registration process.  This gem allows you to send email and upload
+files to share programmatically.
 
 ## Usage
 
 ### 1. API Key
 
-You must set the API key before performing any operations.  API keys are granted on a per-user basis using the administration portal.  All operations are done on behalf of the user to which the API key belongs.
+You must set the API key before performing any operations.  API keys are
+granted on a per-user basis using the administration portal.  All operations
+are done on behalf of the user to which the API key belongs.
 
 ```ruby
 DigitSend::Config.api_token = 'bdf6a88dcb7e3ff3df18afda99591360'
@@ -31,11 +35,14 @@ end
 A few things to note:
 
 * Call to or cc multiple times to add multiple recipients.
-* The second (optional) argument to the to and cc methods is that user's phone number.  The phone number is required if this is the first message being sent to the user.
+* The second (optional) argument to the to and cc methods is that user's phone
+  number.  The phone number is required if this is the first message being sent
+  to the user.
 
 ### 3. DigitSend::MissingPhoneNumbers
 
-This exception is thrown whenever an attempt is made to send a message to a new user without providing a phone number:
+This exception is thrown whenever an attempt is made to send a message to a new
+user without providing a phone number:
 
 ```ruby
 begin
@@ -72,7 +79,8 @@ end
 
 ### 5. Uploading Files to Repositories
 
-Repositories are referenced by name and must be created in using the admin portal.
+Repositories are referenced by name and must be created in using the admin
+portal.
 
 ```ruby
 DigitSend::Repository.upload "Reports", "/Internal/#{Date.today}", "activity.csv"
@@ -81,4 +89,6 @@ DigitSend::Repository.upload "Reports", "/Internal/#{Date.today}", "activity.csv
 * The first parameter is the name of the repository.
 * The second parameter identifies the folder to which the file should belong.  Folders are created on the fly, mkdir_p style.
 * The third parameter is the name of the file.
-* The optional fourth parameter can be the string contents of the file or an object just like when attaching a file to a message.  (Above.)
+* The optional fourth parameter can can be the string contents of the file or
+  an object; it has the same behavior as with message attachments described
+  above.
