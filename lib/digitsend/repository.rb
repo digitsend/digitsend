@@ -1,6 +1,6 @@
 module DigitSend
   class Repository
-    def self.upload(repo_name, path, filename, data)
+    def self.upload(repo_name, path, filename, data = nil)
       uuid = Client.upload_s3_file(filename, data)
 
       Client.call '/files/versions',
