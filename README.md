@@ -1,8 +1,8 @@
 # DigitSend
 
-DigitSend is a secure email and file sharing service with a streamlined
-two-factor registration process.  This gem allows you to send email and upload
-files to share programmatically.
+[DigitSend](https://www.digitsend.com/) is a secure email and file sharing
+service with a streamlined two-factor registration process.  This gem allows
+you to send email and upload files to share programmatically.
 
 ## Usage
 
