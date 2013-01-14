@@ -64,7 +64,7 @@ module DigitSend
           end
         end
 
-        def exception_for_response!(hash)
+        def exception_for_response(hash)
           raise case hash["message"]
             when "Missing phone numbers" then MissingPhoneNumbers.new(hash)
             else DigitSend::Exception.new(hash)
