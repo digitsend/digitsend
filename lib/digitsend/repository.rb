@@ -4,18 +4,16 @@ module DigitSend
       def upload(repo_name, path, filename, data = nil)
         begin
           uuid = Client.upload_s3_file(filename, data)
-        rescue Exception => ex
-          puts ex.message
-          puts "trying with content"
-          return create_version_with_content(filename, data)
+        rescue Errno::ECONNREFUSED
+          return create_version_with_content(repo_name, path, filename, data)
         end
 
-        create_version_with_s3_file(uuid)
+        create_version_with_s3_file(repo_name, path, uuid)
       end
 
       private
 
-        def create_version_with_s3_file(uuid)
+        def create_version_with_s3_file(repo_name, path, uuid)
           Client.call '/files/versions',
             repo_name: repo_name,
             path: path,
@@ -24,13 +22,13 @@ module DigitSend
             }
         end
 
-        def create_version_with_content(filename, data)
+        def create_version_with_content(repo_name, path, filename, data)
           Client.call '/files/versions',
             repo_name: repo_name,
             path: path,
             direct_upload: {
               filename: filename,
-              data: stream_for_data(filename, data).read
+              data: Client.stream_for_data(filename, data).read
             }
         end
     end
