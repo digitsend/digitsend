@@ -34,6 +34,16 @@ module DigitSend
          response["uuid"]
       end
 
+      def stream_for_data(path, data)
+        if data.nil?
+          File.open(path, "r")
+        elsif data.is_a?(String)
+          StringIO.new(data)
+        else
+          data
+        end
+      end
+
       private
 
         def create_s3_file(filename)
@@ -51,16 +61,6 @@ module DigitSend
 
           n.start do |http|
             http.request(req)
-          end
-        end
-
-        def stream_for_data(path, data)
-          if data.nil?
-            File.open(path, "r")
-          elsif data.is_a?(String)
-            StringIO.new(data)
-          else
-            data
           end
         end
 
