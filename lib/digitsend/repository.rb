@@ -4,7 +4,9 @@ module DigitSend
       def upload(repo_name, path, filename, data = nil)
         begin
           uuid = Client.upload_s3_file(filename, data)
-        rescue
+        rescue Exception => ex
+          puts ex.message
+          puts "trying with content"
           return create_version_with_content(filename, data)
         end
 
