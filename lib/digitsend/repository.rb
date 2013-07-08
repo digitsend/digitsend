@@ -26,7 +26,8 @@ module DigitSend
           Client.call '/files/versions',
             repo_name: repo_name,
             path: path,
-            repo_file_version: {
+            direct_upload: {
+              filename: filename,
               data: stream_for_data(filename, data).read
             }
         end
