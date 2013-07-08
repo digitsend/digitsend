@@ -5,7 +5,7 @@ module DigitSend
         begin
           uuid = Client.upload_s3_file(filename, data)
         rescue
-          return create_version_with_s3_file(filename, data)
+          return create_version_with_content(filename, data)
         end
 
         create_version_with_s3_file(uuid)
